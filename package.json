@@ -10,9 +10,14 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "circomlibjs": "^0.1.7",
     "cors": "^2.8.5",
-    "dotenv": "^16.4.5",
+    "crypto": "^1.0.1",
+    "dotenv": "^16.4.7",
     "express": "^4.21.1",
-    "node-telegram-bot-api": "^0.66.0"
+    "merkletreejs": "^0.4.0",
+    "mongoose": "^8.9.1",
+    "node-telegram-bot-api": "^0.66.0",
+    "starknet": "^6.11.0"
   }
 }

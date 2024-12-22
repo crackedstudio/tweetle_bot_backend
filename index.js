@@ -2,11 +2,15 @@ require('dotenv').config()
 const express = require('express'),
     app = express(),
     TelegramBot = require('node-telegram-bot-api'),
-    bot = new TelegramBot(process.env.BOT_API_KEY, {polling: true});
+    bot = new TelegramBot(process.env.BOT_API_KEY, {polling: true}),
+    models = require('./models'),
+    gameRoutes = require('./routes/game.route');
 
 app.use(express.json())
 app.use(express.urlencoded({extended: false}))
 
+
+app.use('/game', gameRoutes);
 
 // Matches "/echo [whatever]"
 bot.onText(/\/echo(.+)/, (msg, match) => {
@@ -69,5 +73,7 @@ bot.on('message', (msg) => {
 
 
 app.listen(process.env.PORT, () => {
-    console.log("bot backend started @", process.env.PORT)
+    console.log('-----------------------------------------')
+    console.log("Tweetle backend started @", process.env.PORT)
+    console.log('-----------------------------------------')
 })
