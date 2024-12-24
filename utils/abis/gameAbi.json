@@ -20,32 +20,6 @@
   },
   {
     "type": "struct",
-    "name": "tweetle__contract::game_contract::Trials",
-    "members": [
-      {
-        "name": "first",
-        "type": "core::felt252"
-      },
-      {
-        "name": "second",
-        "type": "core::felt252"
-      },
-      {
-        "name": "third",
-        "type": "core::felt252"
-      },
-      {
-        "name": "fourth",
-        "type": "core::felt252"
-      },
-      {
-        "name": "fifth",
-        "type": "core::felt252"
-      }
-    ]
-  },
-  {
-    "type": "struct",
     "name": "core::integer::u256",
     "members": [
       {
@@ -99,6 +73,32 @@
     ]
   },
   {
+    "type": "struct",
+    "name": "tweetle__contract::game_contract::Game",
+    "members": [
+      {
+        "name": "game_type",
+        "type": "core::felt252"
+      },
+      {
+        "name": "secret_word",
+        "type": "core::felt252"
+      },
+      {
+        "name": "players_count",
+        "type": "core::integer::u256"
+      },
+      {
+        "name": "is_completed",
+        "type": "core::bool"
+      },
+      {
+        "name": "allowed_trials",
+        "type": "core::integer::u8"
+      }
+    ]
+  },
+  {
     "type": "interface",
     "name": "tweetle__contract::game_contract::IGame",
     "items": [
@@ -112,26 +112,6 @@
           }
         ],
         "state_mutability": "external"
-      },
-      {
-        "type": "function",
-        "name": "get_user_recent_play",
-        "inputs": [
-          {
-            "name": "player_address",
-            "type": "core::starknet::contract_address::ContractAddress"
-          },
-          {
-            "name": "game_id",
-            "type": "core::integer::u32"
-          }
-        ],
-        "outputs": [
-          {
-            "type": "tweetle__contract::game_contract::Trials"
-          }
-        ],
-        "state_mutability": "view"
       },
       {
         "type": "function",
@@ -183,6 +163,42 @@
         "outputs": [
           {
             "type": "core::felt252"
+          }
+        ],
+        "state_mutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "get_player_games",
+        "inputs": [
+          {
+            "name": "_player",
+            "type": "core::starknet::contract_address::ContractAddress"
+          }
+        ],
+        "outputs": [
+          {
+            "type": "core::array::Array::<tweetle__contract::game_contract::Game>"
+          }
+        ],
+        "state_mutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "get_player_game",
+        "inputs": [
+          {
+            "name": "_player",
+            "type": "core::starknet::contract_address::ContractAddress"
+          },
+          {
+            "name": "_game_id",
+            "type": "core::integer::u32"
+          }
+        ],
+        "outputs": [
+          {
+            "type": "tweetle__contract::game_contract::Game"
           }
         ],
         "state_mutability": "view"

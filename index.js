@@ -4,11 +4,21 @@ const express = require('express'),
     TelegramBot = require('node-telegram-bot-api'),
     // bot = new TelegramBot(process.env.BOT_API_KEY, {polling: true}),
     models = require('./models'),
-    gameRoutes = require('./routes/game.route');
+    gameRoutes = require('./routes/game.route'),
+    cors = require('cors');
+
+
+app.use(cors())    
 
 app.use(express.json())
 app.use(express.urlencoded({extended: false}))
 
+
+app.use((req, res, next) => {
+  console.log(req.method, req.path)
+
+  next()
+})
 
 app.use('/game', gameRoutes);
 

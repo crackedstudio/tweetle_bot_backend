@@ -76,20 +76,20 @@ exports.processGuess = async (req, res) => {
 exports.updateDailyWord = async (req, res) => {
     try {    
       console.log(1)
-      await gameContract.connect(account)
+       gameContract.connect(account)
        let multiCall = await account?.execute([
           {
             contractAddress: process.env.VRF_PROVIDER_ADDRESS,
             entrypoint: 'request_random',
             calldata: CallData.compile({
               caller: process.env.GAME_CONTRACT,
-              source: [account?.address],
+              source: {type: 0, address: account.address},
             })
           }, 
-          // {
-          //   contractAddress: process.env.GAME_CONTRACT,
-          //   entrypoint: "set_daily_word",
-          // }
+          {
+            contractAddress: process.env.GAME_CONTRACT,
+            entrypoint: "create_new_game",
+          }
        ]);
 
        console.log(2)
