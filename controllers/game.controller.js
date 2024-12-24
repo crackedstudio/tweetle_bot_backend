@@ -66,7 +66,7 @@ exports.processGuess = async (req, res) => {
     console.log(emojiArray);
     console.log(response)
 
-    return res.status(200).json({message: 'success', data: emojiArray});
+    return res.status(200).json({message: 'success'});
 
   } catch (error) {
     return res.status(400).json({message: error.message, error: error});
