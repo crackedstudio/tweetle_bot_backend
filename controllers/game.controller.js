@@ -1,9 +1,6 @@
 require('dotenv').config()
 const { Account, RpcProvider, Contract, cairo, CallData } = require("starknet"),
 gameAbi = require('../utils/abis/gameAbi.json');
-const { MerkleTree } = require('merkletreejs');
-const circomlibjs = require('circomlibjs');
-const { func } = require('../utils/helper');
 
 const provider = new RpcProvider({ nodeUrl: process.env.PROVIDER});
 
@@ -26,7 +23,7 @@ exports.processGuess = async (req, res) => {
 
   try {
     let result = [];
-    let emojiArray = []
+    let outcome = []
 
     // Query daily word
     const response = await gameContract.get_daily_word(word);
@@ -39,9 +36,6 @@ exports.processGuess = async (req, res) => {
         const letter = response[1][i];
         const isValid = response[0].includes(letter); // Check if the letter exists in arr1
         const isRight = response[0][i] === letter; // Check if the letter is at the same index in both arrays
-
-        // console.log(letter.toString(16), response[0][i].toString(16))
-        // console.log(func.tupleToObject(response))
     
         // Add the letter and its validation status as an object to the result array
         result.push({
@@ -52,19 +46,15 @@ exports.processGuess = async (req, res) => {
         });
 
         if (isValid && isRight) {
-            emojiArray.push(2)
+          outcome.push(2)
         }else if(!isRight && isValid) {
-            emojiArray.push(1)
+          outcome.push(1)
         }else if(!isValid && !isRight) {
-            emojiArray.push(0)
+          outcome.push(0)
         }else {
-          emojiArray.push(3)
+          outcome.push(3)
         }
       }
-    
-    // console.log(result);
-    console.log(emojiArray);
-    console.log(response)
 
     return res.status(200).json({message: 'success', data: emojiArray});
 
