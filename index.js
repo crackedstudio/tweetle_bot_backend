@@ -64,6 +64,21 @@ bot.onText(/\/start/, (msg) => {
   console.log(msg.from)
 });
 
+bot.on("polling_error", (error) => {
+  console.log("Polling error:", error); // Log polling errors
+});
+
+bot.on("webhook_error", (error) => {
+  console.log("Webhook error:", error); // Log webhook errors
+});
+
+
+app.post(`/bot${BOT_TOKEN}`, (req, res) => {
+  bot.processUpdate(req.body);
+  res.sendStatus(200);
+});
+
+
 // // Matches "/echo [whatever]"
 // bot.onText(/\/echo(.+)/, (msg, match) => {
 
