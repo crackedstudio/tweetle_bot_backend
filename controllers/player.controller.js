@@ -39,19 +39,21 @@ exports.registerPlayer = async (req, res) => {
 
 
 exports.outsideExecution = async (req, res) => {
+
+    res.send(req.body);
     
-    try {
+    // try {
 
-        let outsideCall = await account.execute(req.body);
+    //     let outsideCall = await account.execute(req.body);
 
-        let r = await provider.waitForTransaction(outsideCall.transaction_hash);
+    //     let r = await provider.waitForTransaction(outsideCall.transaction_hash);
 
-        return res.status(200).json({message: 'executed', data: r})
+    //     return res.status(200).json({message: 'executed', data: r})
 
         
-    } catch (error) {
-        return res.status(400).json({message: error.message, error: error});
-    }
+    // } catch (error) {
+    //     return res.status(400).json({message: error.message, error: error});
+    // }
 }
 
 module.exports = exports
