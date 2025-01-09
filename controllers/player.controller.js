@@ -20,13 +20,13 @@ const gameContract = new Contract(
 
 exports.registerPlayer = async (req, res) => {
 
-    let {outsideExecutionCall} = req.body;
+    let {deploymentPayload} = req.body;
 
     try {
 
-        Player.findOne();
+        // Player.findOne();
 
-        let deploymentCall = await account.execute(outsideExecutionCall);
+        let deploymentCall = await account.deployAccount(deploymentPayload);
 
         await provider.waitForTransaction(deploymentCall.transaction_hash);
 
