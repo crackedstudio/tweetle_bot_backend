@@ -19,14 +19,15 @@ const gameContract = new Contract(
 
 exports.processGuess = async (req, res) => {
 
-  let {word} = req.body
+  let {word, i} = req.body
 
   try {
     let result = [];
-    let outcome = []
+    let outcome = [];
+    let points = 0;
 
     // Query daily word
-    const response = await gameContract.get_daily_word(word);
+    const response = await gameContract.get_game_word(word, i);
 
     if (word.length != 5) {
       throw new Error('Guess must be a five letter word');
@@ -47,16 +48,19 @@ exports.processGuess = async (req, res) => {
 
         if (isValid && isRight) {
           outcome.push(2)
+          points + 5
         }else if(!isRight && isValid) {
           outcome.push(1)
+          points + 3
         }else if(!isValid && !isRight) {
           outcome.push(0)
         }else {
+          points + 0
           outcome.push(3)
         }
       }
 
-    return res.status(200).json({message: 'success', data: emojiArray});
+    return res.status(200).json({message: 'success', data: emojiArray, points: points});
 
   } catch (error) {
     return res.status(400).json({message: error.message, error: error});

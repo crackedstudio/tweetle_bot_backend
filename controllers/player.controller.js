@@ -20,17 +20,15 @@ const gameContract = new Contract(
 
 exports.registerPlayer = async (req, res) => {
 
-    let {deploymentPayload} = req.body;
-
     try {
 
         // Player.findOne();
 
-        let deploymentCall = await account.deployAccount(deploymentPayload);
+        let deploymentCall = await account.deployAccount(req.body);
 
-        await provider.waitForTransaction(deploymentCall.transaction_hash);
+        // await provider.waitForTransaction(deploymentCall.transaction_hash);
 
-        return res.status(200).json({message: 'successfully registered !'})
+        return res.send(deploymentCall)
         
     } catch (error) {
         return res.status(400).json({message: error.message, error: error});
