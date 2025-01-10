@@ -29,10 +29,6 @@ exports.processGuess = async (req, res) => {
     // Query daily word
     const response = await gameContract.get_game_word(word, i);
 
-    if (word.length != 5) {
-      throw new Error('Guess must be a five letter word');
-    }
-
     for (let i = 0; i < 5; i++) {
         const letter = response[1][i];
         const isValid = response[0].includes(letter); // Check if the letter exists in arr1
