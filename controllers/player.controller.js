@@ -22,8 +22,6 @@ exports.registerPlayer = async (req, res) => {
 
     try {
 
-        // Player.findOne();
-
         let deploymentCall = await account.deployAccount(req.body);
 
         // await provider.waitForTransaction(deploymentCall.transaction_hash);

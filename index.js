@@ -60,8 +60,9 @@ bot.on("message", async (msg) => {
   console.log(msg);
 });
 
-bot.onText(/\/start/, (msg) => {
-  console.log(msg.from)
+bot.onText(/\/start (.+)/, (msg) => {
+  const referrerId = match[1];
+  console.log(msg.from, referrerId)
 });
 
 bot.on("polling_error", (error) => {
