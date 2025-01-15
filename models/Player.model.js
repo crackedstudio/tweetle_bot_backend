@@ -3,12 +3,10 @@ const mongoose = require('mongoose');
 const PlayerSchema = new mongoose.Schema({
     
     telegramId: {type: String, unique: true},
-    telegramName: {type: String},
-    referalCode: {type: String, unique: true},
+    username: {type: String},
     points: {type: Number, default: 0},
-    referedBy: {type: String, default: null},
-    referrals: [{type: String}]
-
+    referral_code: { type: String, unique: true },
+    referred_by: { type: String },
 
 }, {timestamps: true})
 

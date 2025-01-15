@@ -60,9 +60,53 @@ bot.on("message", async (msg) => {
   console.log(msg);
 });
 
-bot.onText(/\/start (.+)/, (msg) => {
-  const referrerId = match[1];
-  console.log(msg.from, referrerId)
+// bot.onText(/\/start (.+)/, (msg) => {
+//   const referrerId = match[1];
+//   console.log(msg.from, referrerId)
+
+
+// });
+
+// Handle the /start command
+bot.onText(/\/start (.+)?/, async (msg, match) => {
+  const tg_id = msg.from.id;
+  const username = msg.from.username || '';
+  const first_name = msg.from.first_name || '';
+  const last_name = msg.from.last_name || '';
+  const referral_code = match[1]; // Extract referral code from the /start command
+
+  try {
+    // Check if the user already exists in the database
+    let user = await Player.findOne({ tg_id });
+
+    if (!user) {
+      // Generate a unique referral code for the new user
+      const newReferralCode = `REF-${tg_id}`;
+
+      // Create a new user record
+      user = new Player({
+        telegramId: tg_id,
+        username,
+        referral_code: newReferralCode,
+        referred_by: referral_code || null, // Associate referrer if referral_code exists
+      });
+
+      await user.save();
+
+      // Optionally, reward the referrer
+      if (referral_code) {
+        const referrer = await Player.findOne({ referral_code });
+        if (referrer) {
+          referrer.points += 10; // Reward referrer with points
+          await referrer.save();
+        }
+      }
+    }
+
+    console.log(`User ${first_name} (${tg_id}) has started the mini app.`);
+  } catch (error) {
+    console.error('Error handling /start command:', error);
+  }
 });
 
 bot.on("polling_error", (error) => {

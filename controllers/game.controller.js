@@ -1,6 +1,7 @@
 require('dotenv').config()
 const { Account, RpcProvider, Contract, cairo, CallData } = require("starknet"),
-gameAbi = require('../utils/abis/gameAbi.json');
+gameAbi = require('../utils/abis/gameAbi.json'),
+Player = require('../models/Player.model');
 
 const provider = new RpcProvider({ nodeUrl: process.env.PROVIDER});
 
@@ -19,7 +20,7 @@ const gameContract = new Contract(
 
 exports.processGuess = async (req, res) => {
 
-  let {word, i} = req.body
+  let {word, i, tg_id} = req.body
 
   try {
     let result = [];
@@ -56,7 +57,16 @@ exports.processGuess = async (req, res) => {
         }
       }
 
-    return res.status(200).json({message: 'success', data: outcome, points: points});
+    // Update the player's points in the database
+    const player = await Player.findOne({ tg_id }); // Find the player by tg_id
+    if (!player) {
+      return res.status(404).json({ message: 'Player not found' });
+    }
+
+    player.points = (player.points || 0) + points; // Add new points to existing points
+    await player.save(); // Save the updated player
+
+    return res.status(200).json({ message: 'success', data: outcome, points: player.points });
 
   } catch (error) {
     return res.status(400).json({message: error.message, error: error});
@@ -65,24 +75,13 @@ exports.processGuess = async (req, res) => {
 
 exports.updateDailyWord = async (req, res) => {
     try {    
-      console.log(1)
        gameContract.connect(account)
-       let multiCall = await account?.execute([
-          {
-            contractAddress: process.env.VRF_PROVIDER_ADDRESS,
-            entrypoint: 'request_random',
-            calldata: CallData.compile({
-              caller: process.env.GAME_CONTRACT,
-              source: {type: 0, address: account.address},
-            })
-          }, 
+       let multiCall = await account?.execute([ 
           {
             contractAddress: process.env.GAME_CONTRACT,
-            entrypoint: "create_new_game",
+            entrypoint: "set_new_daily_game",
           }
        ]);
-
-       console.log(2)
       
       await provider.waitForTransaction(multiCall.transaction_hash);
 
