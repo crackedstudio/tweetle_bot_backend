@@ -5,7 +5,8 @@ const express = require('express'),
     models = require('./models'),
     gameRoutes = require('./routes/game.route'),
     playerRoutes = require('./routes/player.route'),
-    cors = require('cors');
+    cors = require('cors'),
+    Player = require('./models/Player.model');
 
     const BOT_TOKEN =
   process.env.NODE_ENV === "production"
