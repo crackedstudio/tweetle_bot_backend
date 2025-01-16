@@ -45,14 +45,14 @@ exports.processGuess = async (req, res) => {
 
         if (isValid && isRight) {
           outcome.push(2)
-          points + 5
+          points += 5
         }else if(!isRight && isValid) {
           outcome.push(1)
-          points + 3
+          points += 3
         }else if(!isValid && !isRight) {
           outcome.push(0)
         }else {
-          points + 0
+          points += 1
           outcome.push(3)
         }
       }
