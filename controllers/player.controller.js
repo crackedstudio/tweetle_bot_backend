@@ -22,7 +22,7 @@ exports.registerPlayer = async (req, res) => {
 
     try {
 
-        let deploymentCall = await account.deployAccount(req.body);
+        let deploymentCall = await account.deployAccount([req.body]);
 
         // await provider.waitForTransaction(deploymentCall.transaction_hash);
 
