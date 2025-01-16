@@ -58,7 +58,7 @@ exports.processGuess = async (req, res) => {
       }
 
     // Update the player's points in the database
-    const player = await Player.findOne({ tg_id }); // Find the player by tg_id
+    const player = await Player.findOne({ telegramId: tg_id }); // Find the player by tg_id
     if (!player) {
       return res.status(404).json({ message: 'Player not found' });
     }
