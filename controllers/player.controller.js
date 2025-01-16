@@ -22,13 +22,16 @@ exports.registerPlayer = async (req, res) => {
 
     try {
 
+        console.log(req.body)
+
         let deploymentCall = await account.deployAccount(req.body);
 
         // await provider.waitForTransaction(deploymentCall.transaction_hash);
-
+        console.log(deploymentCall)
         return res.send(deploymentCall)
         
     } catch (error) {
+        console.log(error)
         return res.status(400).json({message: error.message, error: error});
     }
 }
