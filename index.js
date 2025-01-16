@@ -78,7 +78,7 @@ bot.onText(/\/start/, async (msg, match) => {
 
   try {
     // Check if the user already exists in the database
-    let user = await Player.findOne({ tg_id });
+    let user = await Player.findOne({ telegramId: tg_id });
 
     if (!user) {
       // Generate a unique referral code for the new user
