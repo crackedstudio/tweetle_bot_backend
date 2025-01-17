@@ -9,4 +9,7 @@ router.route('/')
 router.route('/daily-word')
     .post(controller.updateDailyWord)
 
+router.route('/get-attempts')
+    .get(controller.getAttempts)
+
 module.exports = router;

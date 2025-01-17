@@ -2,6 +2,7 @@ require('dotenv').config()
 const { Account, RpcProvider, Contract, cairo, CallData } = require("starknet"),
 gameAbi = require('../utils/abis/gameAbi.json'),
 Player = require('../models/Player.model');
+const Attempt = require('../models/attempts.model');
 
 const provider = new RpcProvider({ nodeUrl: process.env.PROVIDER});
 
@@ -20,7 +21,7 @@ const gameContract = new Contract(
 
 exports.processGuess = async (req, res) => {
 
-  let {word, i, tg_id} = req.body
+  let {word, i, tg_id, game_type, game_id} = req.body
 
   try {
     let result = [];
@@ -66,6 +67,17 @@ exports.processGuess = async (req, res) => {
     player.points = (player.points || 0) + points; // Add new points to existing points
     await player.save(); // Save the updated player
 
+      // Save the attempt
+      const newAttempt = new Attempt({
+        telegramId: tg_id,
+        wordIndex: i,
+        guess: word,
+        outcome,
+        gameType: game_type,
+        gameId: game_id
+      });
+      await newAttempt.save();
+
     return res.status(200).json({ message: 'success', data: outcome, points: player.points });
 
   } catch (error) {
@@ -91,3 +103,19 @@ exports.updateDailyWord = async (req, res) => {
       return  res.json({message: error.message, error: error})
     }
 }
+
+exports.getAttempts = async (req, res) => {
+  const { tg_id, gameId, gameType } = req.query;
+
+  try {
+    const attempts = await Attempt.find({
+      telegramId: tg_id,
+      gameId,
+      gameType,
+    }).sort({ timestamp: 1 });
+
+    return res.status(200).json({ message: 'success', data: attempts });
+  } catch (error) {
+    return res.status(400).json({ message: error.message, error });
+  }
+};

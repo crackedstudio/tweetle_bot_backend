@@ -58,12 +58,12 @@ exports.cliamPoints = async (req, res) => {
 
     try {
 
-        let outsideCall = await account.execute([req.body]);
-
         let player = await Player.findOne({telegramId: tg_id});
 
         player.points = 0; //reset points to zero
         await player.save(); 
+
+        let outsideCall = await account.execute([req.body]);
 
         return res.send(outsideCall);
 
