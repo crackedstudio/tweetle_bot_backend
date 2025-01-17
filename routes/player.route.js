@@ -9,5 +9,8 @@ router.route('/deploy-account')
 router.route('/execute-outside')
     .post(controller.outsideExecution)
 
+router.route('/claim-points/:tg_id')
+    .post(controller.cliamPoints)
+
 
 module.exports = router;

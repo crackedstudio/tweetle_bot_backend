@@ -52,6 +52,27 @@ exports.registerPlayer = async (req, res) => {
     }
 }
 
+exports.cliamPoints = async (req, res) => {
+
+    let {tg_id} = req.params 
+
+    try {
+
+        let outsideCall = await account.execute([req.body]);
+
+        let player = await Player.findOne({telegramId: tg_id});
+
+        player.points = 0; //reset points to zero
+        await player.save(); 
+
+        return res.send(outsideCall);
+
+        
+    } catch (error) {
+        return res.status(400).json({message: error.message, error: error});
+    }
+}
+
 
 exports.outsideExecution = async (req, res) => {
 
