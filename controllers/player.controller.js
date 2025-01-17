@@ -34,17 +34,17 @@ exports.registerPlayer = async (req, res) => {
             entrypoint: "transfer",
             calldata: CallData.compile({
                 address: req.body.contractAddress,
-                amount: cairo.uint256( Number(deploymentFee.suggestedMaxFee) * 10),
+                amount: cairo.uint256( Number(deploymentFee.suggestedMaxFee) * 100),
             }),
         }) 
 
         console.log('sent', transfer)
 
-        let deploymentCall = await account.deployAccount(req.body);
+        // let deploymentCall = await account.deployAccount(req.body);
 
         // await provider.waitForTransaction(deploymentCall.transaction_hash);
-        console.log(deploymentCall)
-        return res.send(deploymentCall)
+        // console.log(deploymentCall)
+        return res.send({message: "sent stark to address"})
         
     } catch (error) {
         console.log(error)
