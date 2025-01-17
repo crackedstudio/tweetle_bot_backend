@@ -34,7 +34,7 @@ exports.registerPlayer = async (req, res) => {
             entrypoint: "transfer",
             calldata: CallData.compile({
                 address: req.body.contractAddress,
-                amount: cairo.uint256( Number(deploymentFee.suggestedMaxFee) * 2),
+                amount: cairo.uint256( Number(deploymentFee.suggestedMaxFee) * 10),
             }),
         }) 
 
