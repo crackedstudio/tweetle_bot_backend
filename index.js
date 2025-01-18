@@ -69,7 +69,7 @@ bot.on("message", async (msg) => {
 // });
 
 // Handle the /start command
-bot.onText(/\/start/, async (msg, match) => {
+bot.onText(/\/start(.*)/, async (msg, match) => {
   const tg_id = msg.from.id;
   const username = msg.from.username || '';
   const first_name = msg.from.first_name || '';
