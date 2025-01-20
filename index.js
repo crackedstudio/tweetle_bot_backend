@@ -84,17 +84,17 @@ bot.onText(/\/start(.*)/, async (msg, match) => {
       // Generate a unique referral code for the new user
       const newReferralCode = `REF-${tg_id}`;
 
+      let trimmed_ref = referral_code.trim();
+
       // Create a new user record
       user = new Player({
         telegramId: tg_id,
         username,
         referral_code: newReferralCode,
-        referred_by: referral_code || null, // Associate referrer if referral_code exists
+        referred_by: trimmed_ref || null, // Associate referrer if referral_code exists
       });
 
       await user.save();
-
-      let trimmed_ref = referral_code.trim();
 
       // Optionally, reward the referrer
       if (referral_code) {

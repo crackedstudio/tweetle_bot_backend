@@ -48,7 +48,7 @@ exports.registerPlayer = async (req, res) => {
         
     } catch (error) {
         console.log(error)
-        return res.status(400).json({message: error.message, error: error});
+        return res.status(500).json({message: error.message, error: error});
     }
 }
 
@@ -69,8 +69,31 @@ exports.cliamPoints = async (req, res) => {
 
         
     } catch (error) {
-        return res.status(400).json({message: error.message, error: error});
+        return res.status(500).json({message: error.message, error: error});
     }
+}
+
+exports.getUserReferals = async (req, res) => {
+    
+    try {
+        // Find all players with the specified referral code in the 'referred_by' field
+        const players = await Player.find({ referred_by: referralCode });
+    
+        if (!players || players.length === 0) {
+          return res.status(404).json({ message: 'No players found referred by this code.' });
+        }
+    
+        return res.status(200).json({
+          message: `Players referred by ${referralCode}`,
+          data: players,
+        });
+      } catch (error) {
+        console.error('Error fetching referred players:', error);
+        return res.status(500).json({
+          message: 'An error occurred while fetching referred players.',
+          error: error.message,
+        });
+      }
 }
 
 
@@ -86,7 +109,7 @@ exports.outsideExecution = async (req, res) => {
 
         
     } catch (error) {
-        return res.status(400).json({message: error.message, error: error});
+        return res.status(500).json({message: error.message, error: error});
     }
 }
 

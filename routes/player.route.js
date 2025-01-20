@@ -12,5 +12,7 @@ router.route('/execute-outside')
 router.route('/claim-points/:tg_id')
     .post(controller.cliamPoints)
 
+router.route('/referred-by/:referralCode')
+    .get(controller.getUserReferals)
 
 module.exports = router;
