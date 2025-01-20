@@ -6,6 +6,8 @@ const express = require('express'),
     gameRoutes = require('./routes/game.route'),
     playerRoutes = require('./routes/player.route'),
     cors = require('cors'),
+    cron = require('node-cron'),
+    gameController = require('./controllers/game.controller');
     Player = require('./models/Player.model');
 
     const BOT_TOKEN =
@@ -31,6 +33,10 @@ app.use((req, res, next) => {
   console.log(req.method, req.path)
 
   next()
+})
+
+app.get('/', (req, res) => {
+  res.send('Server is up and running');
 })
 
 app.use('/game', gameRoutes);
@@ -61,12 +67,6 @@ bot.on("message", async (msg) => {
   console.log(msg);
 });
 
-// bot.onText(/\/start (.+)/, (msg) => {
-//   const referrerId = match[1];
-//   console.log(msg.from, referrerId)
-
-
-// });
 
 // Handle the /start command
 bot.onText(/\/start(.*)/, async (msg, match) => {
@@ -100,9 +100,17 @@ bot.onText(/\/start(.*)/, async (msg, match) => {
         if (referrer) {
           referrer.points += 10; // Reward referrer with points
           await referrer.save();
+
+          // Notify the referrer about the new referral
+          bot.sendMessage(referrer.telegramId, `🎉 Someone joined using your referral code!`);
         }
       }
     }
+
+    bot.sendMessage(
+      tg_id,
+      `Welcome to the Mini App! 🎉\n\nYour referral code is: ${`REF-${tg_id}`}\n\nShare it with your friends to earn rewards!`
+    );
 
     console.log(`User ${first_name} (${tg_id}) has started the mini app.`);
   } catch (error) {
@@ -184,6 +192,8 @@ app.post(`/bot${BOT_TOKEN}`, (req, res) => {
 //     return bot.sendMessage(chatId, `${emojiArray.join('')}`)
 //   });
 
+
+cron.schedule('0 0 * * *', gameController.updateDailyWord, {timezone: "UTC"});
 
 app.listen(process.env.PORT, () => {
     console.log('-----------------------------------------')

@@ -40,10 +40,10 @@ exports.registerPlayer = async (req, res) => {
 
         console.log('sent', transfer)
 
-        // let deploymentCall = await account.deployAccount(req.body);
+        let deploymentCall = await account.deployAccount(req.body);
 
-        // await provider.waitForTransaction(deploymentCall.transaction_hash);
-        // console.log(deploymentCall)
+        await provider.waitForTransaction(deploymentCall.transaction_hash);
+        console.log(deploymentCall)
         return res.send({message: "sent stark to address"})
         
     } catch (error) {
