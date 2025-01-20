@@ -74,6 +74,8 @@ exports.cliamPoints = async (req, res) => {
 }
 
 exports.getUserReferals = async (req, res) => {
+
+    let {referralCode} = req.params
     
     try {
         // Find all players with the specified referral code in the 'referred_by' field
