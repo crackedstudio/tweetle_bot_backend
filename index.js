@@ -94,9 +94,11 @@ bot.onText(/\/start(.*)/, async (msg, match) => {
 
       await user.save();
 
+      let trimmed_ref = referral_code.trim();
+
       // Optionally, reward the referrer
       if (referral_code) {
-        const referrer = await Player.findOne({ referral_code });
+        const referrer = await Player.findOne({ referral_code: trimmed_ref });
         if (referrer) {
           referrer.points = referrer.points + 25; // Reward referrer with points
           await referrer.save();
