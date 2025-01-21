@@ -96,11 +96,11 @@ exports.getUser = async (req, res) => {
 
 exports.getUserReferals = async (req, res) => {
 
-    let {referralCode} = req.params
+    let {telegramId} = req.params
     
     try {
         // Find all players with the specified referral code in the 'referred_by' field
-        const players = await Player.find({ referred_by: referralCode });
+        const players = await Player.find({ telegramId: telegramId });
     
         if (!players || players.length === 0) {
           return res.status(404).json({ message: 'No players found referred by this code.' });
