@@ -73,6 +73,27 @@ exports.cliamPoints = async (req, res) => {
     }
 }
 
+exports.getUser = async (req, res) => {
+    const { telegramId } = req.params;
+  
+    try {
+      const user = await Player.findOne({ telegramId });
+  
+      if (!user) {
+        return res.status(404).json({ success: false, message: 'User not found.' });
+      }
+  
+      return res.status(200).json({
+        success: true,
+        data: user,
+      });
+    } catch (error) {
+      console.error('Error fetching user details:', error);
+      return res.status(500).json({ success: false, message: 'Internal server error.' });
+    }
+  };
+
+
 exports.getUserReferals = async (req, res) => {
 
     let {referralCode} = req.params
