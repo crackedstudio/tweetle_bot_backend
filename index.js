@@ -8,7 +8,12 @@ const express = require('express'),
     cors = require('cors'),
     cron = require('node-cron'),
     gameController = require('./controllers/game.controller');
-    Player = require('./models/Player.model');
+    Player = require('./models/Player.model'),
+    { Account, RpcProvider, Contract, cairo, CallData } = require("starknet"),
+    gameAbi = require('./utils/abis/gameAbi.json');
+
+    
+  const provider = new RpcProvider({ nodeUrl: process.env.PROVIDER});
 
     const BOT_TOKEN =
   process.env.NODE_ENV === "production"
@@ -22,6 +27,19 @@ const SERVER_URL =
     : process.env.NODE_ENV === "test"
     ? process.env.TEST_SERVER_URL
     : process.env.DEV_SERVER_URL;
+
+const account = new Account(
+    provider,
+    process.env.ACCT_ADDRESS,
+    process.env.PRIVATE_KEY
+);
+
+const gameContract = new Contract(
+    gameAbi,
+    process.env.GAME_CONTRACT,
+    account
+);
+  
 
 app.use(cors())    
 
@@ -195,7 +213,27 @@ app.post(`/bot${BOT_TOKEN}`, (req, res) => {
 //   });
 
 
-cron.schedule('0 0 * * *', gameController.updateDailyWord, {timezone: "UTC"});
+cron.schedule('0 0 * * *', async () => {
+  try {    
+    gameContract.connect(account)
+    let multiCall = await account?.execute([ 
+       {
+         contractAddress: process.env.GAME_CONTRACT,
+         entrypoint: "set_new_daily_game",
+       }
+    ]);
+   
+   await provider.waitForTransaction(multiCall.transaction_hash);
+
+   console.log('updated')
+  //  return res.status(200).json({message: 'success'})
+     
+ } catch (error) {
+  console.log('error updating')
+  //  return  res.json({message: error.message, error: error})
+ }
+
+}, {timezone: "UTC"});
 
 app.listen(process.env.PORT, () => {
     console.log('-----------------------------------------')
