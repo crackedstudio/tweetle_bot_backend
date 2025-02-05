@@ -103,6 +103,32 @@
       {
         "name": "attempts_allowed",
         "type": "core::integer::u8"
+      },
+      {
+        "name": "id",
+        "type": "core::integer::u32"
+      }
+    ]
+  },
+  {
+    "type": "struct",
+    "name": "tweetle__contract::game_contract::DailyGame",
+    "members": [
+      {
+        "name": "player_count",
+        "type": "core::integer::u256"
+      },
+      {
+        "name": "end_time",
+        "type": "core::integer::u64"
+      },
+      {
+        "name": "word_index",
+        "type": "core::integer::u64"
+      },
+      {
+        "name": "attempts_allowed",
+        "type": "core::integer::u8"
       }
     ]
   },
@@ -251,10 +277,6 @@
           {
             "name": "_word",
             "type": "core::byte_array::ByteArray"
-          },
-          {
-            "name": "_points",
-            "type": "core::integer::u256"
           }
         ],
         "outputs": [
@@ -283,6 +305,104 @@
           }
         ],
         "state_mutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "get_daily_game",
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "tweetle__contract::game_contract::DailyGame"
+          }
+        ],
+        "state_mutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "get_player_daily_game_attempts",
+        "inputs": [
+          {
+            "name": "_player",
+            "type": "core::starknet::contract_address::ContractAddress"
+          },
+          {
+            "name": "_game_id",
+            "type": "core::integer::u32"
+          }
+        ],
+        "outputs": [
+          {
+            "type": "core::array::Array::<core::byte_array::ByteArray>"
+          }
+        ],
+        "state_mutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "claim_points",
+        "inputs": [
+          {
+            "name": "_points",
+            "type": "core::integer::u256"
+          }
+        ],
+        "outputs": [],
+        "state_mutability": "external"
+      },
+      {
+        "type": "function",
+        "name": "get_daily_game_id",
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "core::integer::u32"
+          }
+        ],
+        "state_mutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "get_last_daily_update",
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "core::integer::u64"
+          }
+        ],
+        "state_mutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "get_all_players",
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "core::array::Array::<tweetle__contract::game_contract::Player>"
+          }
+        ],
+        "state_mutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "get_contract_version",
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "core::integer::u8"
+          }
+        ],
+        "state_mutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "join_daily_game",
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "core::bool"
+          }
+        ],
+        "state_mutability": "external"
       }
     ]
   },
