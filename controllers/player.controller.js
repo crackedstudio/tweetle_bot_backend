@@ -30,7 +30,7 @@ exports.registerPlayer = async (req, res) => {
         console.log(req.body.contractAddress)
 
         const transfer = await account.execute({
-            contractAddress: "0x04718f5a0fc34cc1af16a1cdee98ffb20c31f5cd61d6ab07201858f4287c938d",
+            contractAddress: "0x065a247553dbb49922ee472cd27baa26897a9b00b02513997cd2832b1adc99b2",
             entrypoint: "transfer",
             calldata: CallData.compile({
                 address: req.body.contractAddress,
