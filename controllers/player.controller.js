@@ -30,7 +30,7 @@ exports.registerPlayer = async (req, res) => {
         console.log(req.body.contractAddress)
 
         const transfer = await account.execute({
-            contractAddress: "0x065a247553dbb49922ee472cd27baa26897a9b00b02513997cd2832b1adc99b2",
+            contractAddress: "0x04718f5a0fc34cc1af16a1cdee98ffb20c31f5cd61d6ab07201858f4287c938d",
             entrypoint: "transfer",
             calldata: CallData.compile({
                 address: req.body.contractAddress,
@@ -134,6 +134,21 @@ exports.outsideExecution = async (req, res) => {
     } catch (error) {
         return res.status(500).json({message: error.message, error: error});
     }
+}
+
+exports.getUserByTgId = async (req, res) => {
+
+  let {tg_id} = req.params
+
+  try {
+
+    let player = await Player.find({ telegramId: tg_id });
+
+    return res.json({message: 'success', data: player.username})
+    
+  } catch (error) {
+    return res.status(500).json({message: error.message, error: error});
+  }
 }
 
 module.exports = exports

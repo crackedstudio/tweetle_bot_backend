@@ -11,6 +11,9 @@ router.route('/execute-outside')
 router.route('/:telegramId')
     .get(controller.getUser)
 
+router.route('/username/:tg_id')
+    .get(controller.getUserByTgId)
+
 router.route('/claim-points/:tg_id')
     .post(controller.cliamPoints)
 
