@@ -138,13 +138,13 @@ exports.outsideExecution = async (req, res) => {
 
 exports.getUserByTgId = async (req, res) => {
 
-  let {tg_id} = req.params
+  const {tg_id} = req.params;
 
   try {
 
-    let player = await Player.find({ telegramId: tg_id });
+    let player = await Player.findOne({ telegramId: tg_id });
 
-    return res.json({message: 'success', data: player.username})
+    return res.status(200).json({success: true, data: player.username})
     
   } catch (error) {
     return res.status(500).json({message: error.message, error: error});

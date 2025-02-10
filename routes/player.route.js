@@ -8,11 +8,11 @@ router.route('/deploy-account')
 router.route('/execute-outside')
     .post(controller.outsideExecution)
 
-router.route('/:telegramId')
-    .get(controller.getUser)
-
 router.route('/username/:tg_id')
     .get(controller.getUserByTgId)
+
+router.route('/:telegramId')
+    .get(controller.getUser)
 
 router.route('/claim-points/:tg_id')
     .post(controller.cliamPoints)
