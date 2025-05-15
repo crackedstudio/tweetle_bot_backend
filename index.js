@@ -79,7 +79,7 @@ const bot =
         webHook: true,
       });
 
-bot.setWebHook(`${SERVER_URL}/bot${BOT_TOKEN}`);
+// bot.setWebHook(`${SERVER_URL}/bot${BOT_TOKEN}`);
 
 bot.on("message", async (msg) => {
   console.log(msg);
@@ -138,19 +138,19 @@ bot.onText(/\/start(.*)/, async (msg, match) => {
   }
 });
 
-bot.on("polling_error", (error) => {
-  console.log("Polling error:", error); // Log polling errors
-});
+// bot.on("polling_error", (error) => {
+//   console.log("Polling error:", error); // Log polling errors
+// });
 
-bot.on("webhook_error", (error) => {
-  console.log("Webhook error:", error); // Log webhook errors
-});
+// bot.on("webhook_error", (error) => {
+//   console.log("Webhook error:", error); // Log webhook errors
+// });
 
 
-app.post(`/bot${BOT_TOKEN}`, (req, res) => {
-  bot.processUpdate(req.body);
-  res.sendStatus(200);
-});
+// app.post(`/bot${BOT_TOKEN}`, (req, res) => {
+//   bot.processUpdate(req.body);
+//   res.sendStatus(200);
+// });
 
 
 // // Matches "/echo [whatever]"
@@ -219,7 +219,7 @@ cron.schedule('0 0 * * *', async () => {
     let multiCall = await account?.execute([ 
        {
          contractAddress: process.env.GAME_CONTRACT,
-         entrypoint: "set_new_daily_game",
+         entrypoint: "set_daily_game",
        }
     ]);
    
@@ -238,6 +238,6 @@ cron.schedule('0 0 * * *', async () => {
 app.listen(process.env.PORT, () => {
     console.log('-----------------------------------------')
     console.log("Tweetle backend started @", process.env.PORT)
-    console.log(`web hook set to ${SERVER_URL}/bot${BOT_TOKEN}`)
+    // console.log(`web hook set to ${SERVER_URL}/bot${BOT_TOKEN}`)
     console.log('-----------------------------------------')
 })
