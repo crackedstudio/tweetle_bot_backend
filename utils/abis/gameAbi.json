@@ -1,8 +1,8 @@
 [
   {
     "type": "impl",
-    "name": "GameImpl",
-    "interface_name": "tweetle__contract::game_contract::IGame"
+    "name": "WordleGameImpl",
+    "interface_name": "tweetle__contract_v2::interfaces::IWordleGame::IWordleGame"
   },
   {
     "type": "enum",
@@ -14,6 +14,20 @@
       },
       {
         "name": "True",
+        "type": "()"
+      }
+    ]
+  },
+  {
+    "type": "enum",
+    "name": "tweetle__contract_v2::constants::types::GameType",
+    "variants": [
+      {
+        "name": "Daily",
+        "type": "()"
+      },
+      {
+        "name": "Classic",
         "type": "()"
       }
     ]
@@ -34,114 +48,86 @@
   },
   {
     "type": "struct",
-    "name": "tweetle__contract::game_contract::Player",
+    "name": "tweetle__contract_v2::constants::types::Player",
     "members": [
       {
-        "name": "tg_id",
+        "name": "username",
         "type": "core::felt252"
       },
       {
-        "name": "points",
-        "type": "core::integer::u256"
-      },
-      {
-        "name": "current_game",
-        "type": "core::integer::u32"
-      },
-      {
-        "name": "daily_play_count",
-        "type": "core::integer::u8"
-      },
-      {
         "name": "classic_game_count",
-        "type": "core::integer::u32"
+        "type": "core::integer::u64"
       },
       {
-        "name": "level",
-        "type": "core::integer::u8"
+        "name": "points",
+        "type": "core::integer::u64"
       },
       {
         "name": "is_registered",
         "type": "core::bool"
+      },
+      {
+        "name": "address",
+        "type": "core::starknet::contract_address::ContractAddress"
+      },
+      {
+        "name": "refferer",
+        "type": "core::starknet::contract_address::ContractAddress"
+      },
+      {
+        "name": "friends_count",
+        "type": "core::integer::u256"
       }
     ]
   },
   {
     "type": "struct",
-    "name": "core::byte_array::ByteArray",
+    "name": "tweetle__contract_v2::constants::types::Game",
     "members": [
       {
-        "name": "data",
-        "type": "core::array::Array::<core::bytes_31::bytes31>"
+        "name": "game_id",
+        "type": "core::integer::u64"
       },
       {
-        "name": "pending_word",
+        "name": "active_players",
+        "type": "core::integer::u256"
+      },
+      {
+        "name": "game_type",
         "type": "core::felt252"
       },
       {
-        "name": "pending_word_len",
-        "type": "core::integer::u32"
-      }
-    ]
-  },
-  {
-    "type": "struct",
-    "name": "tweetle__contract::game_contract::Game",
-    "members": [
-      {
-        "name": "word_index",
+        "name": "starts_at",
         "type": "core::integer::u64"
       },
       {
-        "name": "players_count",
-        "type": "core::integer::u256"
+        "name": "expires_at",
+        "type": "core::integer::u64"
       },
       {
-        "name": "is_completed",
+        "name": "word",
+        "type": "core::felt252"
+      },
+      {
+        "name": "has_ended",
         "type": "core::bool"
-      },
-      {
-        "name": "attempts_allowed",
-        "type": "core::integer::u8"
-      },
-      {
-        "name": "id",
-        "type": "core::integer::u32"
-      }
-    ]
-  },
-  {
-    "type": "struct",
-    "name": "tweetle__contract::game_contract::DailyGame",
-    "members": [
-      {
-        "name": "player_count",
-        "type": "core::integer::u256"
-      },
-      {
-        "name": "end_time",
-        "type": "core::integer::u64"
-      },
-      {
-        "name": "word_index",
-        "type": "core::integer::u64"
-      },
-      {
-        "name": "attempts_allowed",
-        "type": "core::integer::u8"
       }
     ]
   },
   {
     "type": "interface",
-    "name": "tweetle__contract::game_contract::IGame",
+    "name": "tweetle__contract_v2::interfaces::IWordleGame::IWordleGame",
     "items": [
       {
         "type": "function",
         "name": "register_player",
         "inputs": [
           {
-            "name": "_tg_id",
+            "name": "_username",
+            "type": "core::felt252"
+          },
+          {
+            "name": "referal_id",
             "type": "core::felt252"
           }
         ],
@@ -154,7 +140,7 @@
       },
       {
         "type": "function",
-        "name": "set_new_daily_game",
+        "name": "start_classic",
         "inputs": [],
         "outputs": [
           {
@@ -165,184 +151,73 @@
       },
       {
         "type": "function",
-        "name": "get_player_details",
+        "name": "attempt_classic",
         "inputs": [
           {
-            "name": "player_address",
-            "type": "core::starknet::contract_address::ContractAddress"
+            "name": "game_id",
+            "type": "core::integer::u64"
+          },
+          {
+            "name": "word",
+            "type": "core::felt252"
           }
         ],
         "outputs": [
           {
-            "type": "tweetle__contract::game_contract::Player"
+            "type": "core::bool"
           }
         ],
-        "state_mutability": "view"
+        "state_mutability": "external"
       },
       {
         "type": "function",
-        "name": "get_game_word",
+        "name": "set_daily_game",
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "core::bool"
+          }
+        ],
+        "state_mutability": "external"
+      },
+      {
+        "type": "function",
+        "name": "attempt_daily_game",
         "inputs": [
           {
             "name": "word",
-            "type": "core::byte_array::ByteArray"
-          },
+            "type": "core::felt252"
+          }
+        ],
+        "outputs": [
           {
-            "name": "i",
+            "type": "core::bool"
+          }
+        ],
+        "state_mutability": "external"
+      },
+      {
+        "type": "function",
+        "name": "add_extra_attempt",
+        "inputs": [
+          {
+            "name": "game_id",
             "type": "core::integer::u64"
-          }
-        ],
-        "outputs": [
+          },
           {
-            "type": "(core::array::Array::<core::felt252>, core::array::Array::<core::felt252>)"
+            "name": "game_type",
+            "type": "tweetle__contract_v2::constants::types::GameType"
           }
         ],
-        "state_mutability": "view"
-      },
-      {
-        "type": "function",
-        "name": "create_new_classic_game",
-        "inputs": [],
-        "outputs": [
-          {
-            "type": "core::bool"
-          }
-        ],
+        "outputs": [],
         "state_mutability": "external"
       },
       {
         "type": "function",
-        "name": "get_player_classic_games",
+        "name": "set_attempt_price",
         "inputs": [
           {
-            "name": "_player",
-            "type": "core::starknet::contract_address::ContractAddress"
-          }
-        ],
-        "outputs": [
-          {
-            "type": "core::array::Array::<tweetle__contract::game_contract::Game>"
-          }
-        ],
-        "state_mutability": "view"
-      },
-      {
-        "type": "function",
-        "name": "save_player_daily_attempt",
-        "inputs": [
-          {
-            "name": "_word",
-            "type": "core::byte_array::ByteArray"
-          },
-          {
-            "name": "_points",
-            "type": "core::integer::u256"
-          }
-        ],
-        "outputs": [
-          {
-            "type": "core::bool"
-          }
-        ],
-        "state_mutability": "external"
-      },
-      {
-        "type": "function",
-        "name": "get_player_classic_game_attempts",
-        "inputs": [
-          {
-            "name": "_player",
-            "type": "core::starknet::contract_address::ContractAddress"
-          },
-          {
-            "name": "_game_id",
-            "type": "core::integer::u32"
-          }
-        ],
-        "outputs": [
-          {
-            "type": "core::array::Array::<core::byte_array::ByteArray>"
-          }
-        ],
-        "state_mutability": "view"
-      },
-      {
-        "type": "function",
-        "name": "save_Player_classic_attempt",
-        "inputs": [
-          {
-            "name": "_game_id",
-            "type": "core::integer::u32"
-          },
-          {
-            "name": "_word",
-            "type": "core::byte_array::ByteArray"
-          }
-        ],
-        "outputs": [
-          {
-            "type": "core::bool"
-          }
-        ],
-        "state_mutability": "external"
-      },
-      {
-        "type": "function",
-        "name": "get_player_classic_game",
-        "inputs": [
-          {
-            "name": "_player",
-            "type": "core::starknet::contract_address::ContractAddress"
-          },
-          {
-            "name": "_game_id",
-            "type": "core::integer::u32"
-          }
-        ],
-        "outputs": [
-          {
-            "type": "tweetle__contract::game_contract::Game"
-          }
-        ],
-        "state_mutability": "view"
-      },
-      {
-        "type": "function",
-        "name": "get_daily_game",
-        "inputs": [],
-        "outputs": [
-          {
-            "type": "tweetle__contract::game_contract::DailyGame"
-          }
-        ],
-        "state_mutability": "view"
-      },
-      {
-        "type": "function",
-        "name": "get_player_daily_game_attempts",
-        "inputs": [
-          {
-            "name": "_player",
-            "type": "core::starknet::contract_address::ContractAddress"
-          },
-          {
-            "name": "_game_id",
-            "type": "core::integer::u32"
-          }
-        ],
-        "outputs": [
-          {
-            "type": "core::array::Array::<core::byte_array::ByteArray>"
-          }
-        ],
-        "state_mutability": "view"
-      },
-      {
-        "type": "function",
-        "name": "claim_points",
-        "inputs": [
-          {
-            "name": "_points",
+            "name": "amount",
             "type": "core::integer::u256"
           }
         ],
@@ -351,33 +226,36 @@
       },
       {
         "type": "function",
-        "name": "get_daily_game_id",
-        "inputs": [],
+        "name": "get_player",
+        "inputs": [
+          {
+            "name": "_player",
+            "type": "core::starknet::contract_address::ContractAddress"
+          }
+        ],
         "outputs": [
           {
-            "type": "core::integer::u32"
+            "type": "tweetle__contract_v2::constants::types::Player"
           }
         ],
         "state_mutability": "view"
       },
       {
         "type": "function",
-        "name": "get_last_daily_update",
-        "inputs": [],
-        "outputs": [
+        "name": "get_classic_game",
+        "inputs": [
           {
+            "name": "_player",
+            "type": "core::starknet::contract_address::ContractAddress"
+          },
+          {
+            "name": "_game_id",
             "type": "core::integer::u64"
           }
         ],
-        "state_mutability": "view"
-      },
-      {
-        "type": "function",
-        "name": "get_all_players",
-        "inputs": [],
         "outputs": [
           {
-            "type": "core::array::Array::<tweetle__contract::game_contract::Player>"
+            "type": "tweetle__contract_v2::constants::types::Game"
           }
         ],
         "state_mutability": "view"
@@ -395,14 +273,159 @@
       },
       {
         "type": "function",
-        "name": "join_daily_game",
+        "name": "get_player_classic_games",
+        "inputs": [
+          {
+            "name": "_player",
+            "type": "core::starknet::contract_address::ContractAddress"
+          }
+        ],
+        "outputs": [
+          {
+            "type": "core::array::Array::<tweetle__contract_v2::constants::types::Game>"
+          }
+        ],
+        "state_mutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "get_all_players",
         "inputs": [],
         "outputs": [
           {
-            "type": "core::bool"
+            "type": "core::array::Array::<tweetle__contract_v2::constants::types::Player>"
           }
         ],
-        "state_mutability": "external"
+        "state_mutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "get_player_friends",
+        "inputs": [
+          {
+            "name": "_player",
+            "type": "core::starknet::contract_address::ContractAddress"
+          }
+        ],
+        "outputs": [
+          {
+            "type": "core::array::Array::<tweetle__contract_v2::constants::types::Player>"
+          }
+        ],
+        "state_mutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "get_player_classic_game_attempts",
+        "inputs": [
+          {
+            "name": "_player",
+            "type": "core::starknet::contract_address::ContractAddress"
+          },
+          {
+            "name": "_game_id",
+            "type": "core::integer::u64"
+          }
+        ],
+        "outputs": [
+          {
+            "type": "core::array::Array::<(core::felt252, core::array::Array::<core::integer::u8>)>"
+          }
+        ],
+        "state_mutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "get_daily_winners",
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "core::array::Array::<tweetle__contract_v2::constants::types::Player>"
+          }
+        ],
+        "state_mutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "get_daily_game_count",
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "core::integer::u64"
+          }
+        ],
+        "state_mutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "get_next_daily_update",
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "core::integer::u64"
+          }
+        ],
+        "state_mutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "get_player_daily_attempts",
+        "inputs": [
+          {
+            "name": "_player",
+            "type": "core::starknet::contract_address::ContractAddress"
+          }
+        ],
+        "outputs": [
+          {
+            "type": "core::array::Array::<(core::felt252, core::array::Array::<core::integer::u8>)>"
+          }
+        ],
+        "state_mutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "get_player_classic_attempt_count",
+        "inputs": [
+          {
+            "name": "_player",
+            "type": "core::starknet::contract_address::ContractAddress"
+          },
+          {
+            "name": "_game_id",
+            "type": "core::integer::u64"
+          }
+        ],
+        "outputs": [
+          {
+            "type": "core::integer::u8"
+          }
+        ],
+        "state_mutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "get_hint_for_attempt",
+        "inputs": [
+          {
+            "name": "attempt",
+            "type": "core::felt252"
+          },
+          {
+            "name": "_game_id",
+            "type": "core::integer::u64"
+          },
+          {
+            "name": "_player",
+            "type": "core::starknet::contract_address::ContractAddress"
+          }
+        ],
+        "outputs": [
+          {
+            "type": "core::array::Array::<core::integer::u8>"
+          }
+        ],
+        "state_mutability": "view"
       }
     ]
   },
@@ -436,22 +459,123 @@
       {
         "name": "_daily_instructor",
         "type": "core::starknet::contract_address::ContractAddress"
+      },
+      {
+        "name": "_token",
+        "type": "core::starknet::contract_address::ContractAddress"
       }
     ]
   },
   {
     "type": "event",
-    "name": "tweetle__contract::game_contract::GameContract::GeneratedRandomWord",
+    "name": "tweetle__contract_v2::components::word::WordLibrary::Event",
+    "kind": "enum",
+    "variants": []
+  },
+  {
+    "type": "event",
+    "name": "tweetle__contract_v2::game::wordle_game::WordleGame::Attempted",
     "kind": "struct",
     "members": [
+      {
+        "name": "game_id",
+        "type": "core::integer::u64",
+        "kind": "data"
+      },
+      {
+        "name": "player",
+        "type": "core::starknet::contract_address::ContractAddress",
+        "kind": "data"
+      },
+      {
+        "name": "packed",
+        "type": "core::integer::u16",
+        "kind": "data"
+      },
+      {
+        "name": "hint",
+        "type": "core::array::Array::<core::integer::u8>",
+        "kind": "data"
+      },
+      {
+        "name": "word",
+        "type": "core::felt252",
+        "kind": "data"
+      },
+      {
+        "name": "points_earned",
+        "type": "core::integer::u64",
+        "kind": "data"
+      },
+      {
+        "name": "is_daily",
+        "type": "core::bool",
+        "kind": "data"
+      }
+    ]
+  },
+  {
+    "type": "event",
+    "name": "tweetle__contract_v2::game::wordle_game::WordleGame::GameCreated",
+    "kind": "struct",
+    "members": [
+      {
+        "name": "caller",
+        "type": "core::starknet::contract_address::ContractAddress",
+        "kind": "data"
+      },
+      {
+        "name": "start_time",
+        "type": "core::integer::u64",
+        "kind": "data"
+      },
+      {
+        "name": "expiry_time",
+        "type": "core::integer::u64",
+        "kind": "data"
+      },
       {
         "name": "index",
         "type": "core::felt252",
         "kind": "data"
       },
       {
-        "name": "word",
-        "type": "core::byte_array::ByteArray",
+        "name": "id",
+        "type": "core::integer::u64",
+        "kind": "data"
+      }
+    ]
+  },
+  {
+    "type": "event",
+    "name": "tweetle__contract_v2::game::wordle_game::WordleGame::PointsClaimed",
+    "kind": "struct",
+    "members": [
+      {
+        "name": "player",
+        "type": "core::starknet::contract_address::ContractAddress",
+        "kind": "data"
+      },
+      {
+        "name": "points",
+        "type": "core::integer::u64",
+        "kind": "data"
+      }
+    ]
+  },
+  {
+    "type": "event",
+    "name": "tweetle__contract_v2::game::wordle_game::WordleGame::PlayerRegistered",
+    "kind": "struct",
+    "members": [
+      {
+        "name": "caller",
+        "type": "core::starknet::contract_address::ContractAddress",
+        "kind": "data"
+      },
+      {
+        "name": "points",
+        "type": "core::integer::u64",
         "kind": "data"
       }
     ]
@@ -482,18 +606,92 @@
   },
   {
     "type": "event",
-    "name": "tweetle__contract::game_contract::GameContract::Event",
+    "name": "tweetle__contract_v2::game::wordle_game::WordleGame::DailyGameCreated",
+    "kind": "struct",
+    "members": [
+      {
+        "name": "next_update",
+        "type": "core::integer::u64",
+        "kind": "data"
+      },
+      {
+        "name": "daily_word",
+        "type": "core::felt252",
+        "kind": "data"
+      },
+      {
+        "name": "game_id",
+        "type": "core::integer::u64",
+        "kind": "data"
+      }
+    ]
+  },
+  {
+    "type": "event",
+    "name": "tweetle__contract_v2::game::wordle_game::WordleGame::ExtraAttemptAdded",
+    "kind": "struct",
+    "members": [
+      {
+        "name": "player",
+        "type": "core::starknet::contract_address::ContractAddress",
+        "kind": "data"
+      },
+      {
+        "name": "game_id",
+        "type": "core::integer::u64",
+        "kind": "data"
+      },
+      {
+        "name": "amount",
+        "type": "core::integer::u256",
+        "kind": "data"
+      }
+    ]
+  },
+  {
+    "type": "event",
+    "name": "tweetle__contract_v2::game::wordle_game::WordleGame::Event",
     "kind": "enum",
     "variants": [
       {
-        "name": "GeneratedRandomWord",
-        "type": "tweetle__contract::game_contract::GameContract::GeneratedRandomWord",
+        "name": "WordLibraryEvent",
+        "type": "tweetle__contract_v2::components::word::WordLibrary::Event",
+        "kind": "nested"
+      },
+      {
+        "name": "Attempted",
+        "type": "tweetle__contract_v2::game::wordle_game::WordleGame::Attempted",
+        "kind": "nested"
+      },
+      {
+        "name": "GameCreated",
+        "type": "tweetle__contract_v2::game::wordle_game::WordleGame::GameCreated",
+        "kind": "nested"
+      },
+      {
+        "name": "PointsClaimed",
+        "type": "tweetle__contract_v2::game::wordle_game::WordleGame::PointsClaimed",
+        "kind": "nested"
+      },
+      {
+        "name": "PlayerRegistered",
+        "type": "tweetle__contract_v2::game::wordle_game::WordleGame::PlayerRegistered",
         "kind": "nested"
       },
       {
         "name": "UpgradeableEvent",
         "type": "openzeppelin_upgrades::upgradeable::UpgradeableComponent::Event",
         "kind": "flat"
+      },
+      {
+        "name": "DailyGameCreated",
+        "type": "tweetle__contract_v2::game::wordle_game::WordleGame::DailyGameCreated",
+        "kind": "nested"
+      },
+      {
+        "name": "ExtraAttemptAdded",
+        "type": "tweetle__contract_v2::game::wordle_game::WordleGame::ExtraAttemptAdded",
+        "kind": "nested"
       }
     ]
   }

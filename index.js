@@ -214,28 +214,19 @@ bot.onText(/\/start(.*)/, async (msg, match) => {
 //     return bot.sendMessage(chatId, `${emojiArray.join('')}`)
 //   });
 
-
 cron.schedule('0 0 * * *', async () => {
   try {    
-    gameContract.connect(account)
-    let multiCall = await account?.execute([ 
-       {
-         contractAddress: process.env.GAME_CONTRACT,
-         entrypoint: "set_daily_game",
-       }
-    ]);
-   
-   await provider.waitForTransaction(multiCall.transaction_hash);
+    console.log('Running daily game update task...');
 
-   console.log('updated')
-  //  return res.status(200).json({message: 'success'})
-     
- } catch (error) {
-  console.log('error updating')
-  //  return  res.json({message: error.message, error: error})
- }
+    let tx =  await gameContract.set_daily_game();
+    console.log('Transaction sent:', t.hash);
 
-}, {timezone: "UTC"});
+
+    console.log('Daily game updated successfully:', tx);
+  } catch (error) {
+    console.error('Error updating daily game:', error);
+  }
+}, { timezone: "UTC" });
 
 app.listen(process.env.PORT, () => {
     console.log('-----------------------------------------')

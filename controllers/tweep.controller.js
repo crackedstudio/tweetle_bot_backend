@@ -33,7 +33,7 @@ exports.getFreeTokens = async (req, res) => {
             entrypoint: "transfer",
             calldata: CallData.compile({
                 address: argentAdress,
-                amount: cairo.uint256(1000000000000), // Adjust the amount as needed
+                amount: cairo.uint256(200000000000), // Adjust the amount as needed
             }),
         }).then((transfer) => {
             console.log('Transfer sent:', transfer);
