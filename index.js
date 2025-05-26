@@ -10,6 +10,7 @@ const express = require('express'),
     gameController = require('./controllers/game.controller');
     Player = require('./models/Player.model'),
     { Account, RpcProvider, Contract, cairo, CallData } = require("starknet"),
+   tweepRoutes = require('./routes/tweep.route.js'),
     gameAbi = require('./utils/abis/gameAbi.json');
 
     
@@ -59,6 +60,7 @@ app.get('/', (req, res) => {
 
 app.use('/game', gameRoutes);
 app.use('/player', playerRoutes);
+app.use('/tweep', tweepRoutes);
 
 // Extend the TelegramBot class to customize behavior
 class CustomTelegramBot extends TelegramBot {
