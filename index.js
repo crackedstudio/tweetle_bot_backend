@@ -218,11 +218,14 @@ cron.schedule('0 0 * * *', async () => {
   try {    
     console.log('Running daily game update task...');
 
-    let tx =  await gameContract.set_daily_game();
-    console.log('Transaction sent:', t.hash);
-
-
-    console.log('Daily game updated successfully:', tx);
+    let tx = await account.execute({
+      contractAddress: process.env.GAME_CONTRACT,
+      entrypoint: "set_daily_game",
+      calldata: CallData.compile({})
+    });
+    // Log the transaction hash
+    console.log('Transaction initiated:', tx.transaction_hash);
+    
   } catch (error) {
     console.error('Error updating daily game:', error);
   }
